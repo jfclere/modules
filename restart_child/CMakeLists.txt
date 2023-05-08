@@ -1,0 +1,20 @@
+#==================================
+# mod_child_restart CMake file
+#==================================
+
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+PROJECT(restart_child)
+
+SET(PROJECT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
+SET(PROJECT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+
+SET(MY_SRCS ${PROJECT_SOURCE_DIR}/mod_child_restart.c)
+
+INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")
+INCLUDE_DIRECTORIES("${PROJECT_INCLUDE_DIR}")
+
+ADD_LIBRARY(mod_child_restart MODULE ${MY_SRCS})
+SET_TARGET_PROPERTIES(mod_child_restart PROPERTIES PREFIX "")
+SET_TARGET_PROPERTIES(mod_child_restart PROPERTIES SUFFIX ".so")
+TARGET_LINK_LIBRARIES(mod_child_restart ${APR_LIBRARIES} ${APRUTIL_LIBRARIES} ${APACHE_LIBRARY})
+
