@@ -1,0 +1,34 @@
+dnl configure for mod_child_restart
+dnl
+
+AC_INIT(mod_child_restart.c)
+
+AC_MSG_CHECKING(for Apache httpd installation)
+AC_ARG_WITH(apxs,
+[  --with-apxs[=FILE]	  Build shared Apache module using apxs.
+                          FILE is the apache apxs tool
+],
+[   apxs_support=true
+    if test "$withval" != "no"; then
+        APXS=$withval
+        AC_MSG_RESULT([APXS is ${APXS}])
+        ${APXS} -q PREFIX >/dev/null 2>/dev/null || apxs_support=false
+    else
+        apxs_support=false
+    fi
+        AC_MSG_RESULT([apxs_support is ${apxs_support}])
+    if test "${apxs_support}" = "false" ; then
+        AC_MSG_ERROR(mod_child_restart module need a valid apxs)
+    fi
+    APACHE_BASE=`$APXS -q PREFIX`
+    APACHE_BUILDDIR=`$APXS -q installbuilddir`
+    APACHE_BUILDDIR=`(cd $APACHE_BUILDDIR/..; pwd)`
+],
+[   AC_MSG_ERROR(Please use --with-apxs[=FILE])])
+
+MY_BASE=`pwd`
+AC_SUBST(MY_BASE)
+
+AC_SUBST(APACHE_BASE)
+AC_SUBST(APACHE_BUILDDIR)
+AC_OUTPUT(Makefile)
